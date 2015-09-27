@@ -2,6 +2,7 @@ Nic = function(){
 	//private properties
 	var connection = null;
 	var server = null;
+	var packetCache = [];
 
 	//public methods
 	this.setConnection = function(targetNic){
@@ -30,6 +31,23 @@ Nic = function(){
 	this.setServer = function(hostServer){
 		server = hostServer;
 	};
+
+	this.transferPacketToCache = function(packet){
+		packetCache.push(packet);
+		console.log("Nic: " + packetCache.length);
+	};
+
+	this.transferPacketToNic = function(packet){
+		packetCache.push(packet);
+		console.log("Nic: " + packetCache.length);
+	};
+
+	this.transferPacketToServer = function(packet){
+		packetCache.push(packet);
+		console.log("Nic: " + packetCache.length);
+	};
+
+
 
 	//private methods
 

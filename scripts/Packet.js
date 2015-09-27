@@ -17,28 +17,31 @@ Packet = function(args){
 	this.setDestinationServer = function(targetServer){
 		destinationServer = targetServer;
 	};
-	this.send = function(){
-		var servers = currentServer.listConnectedServers();
-		if(servers.length > 0){
-			var destinationServerIdentified = false;
-			$.each(servers, function(index, server){
-				if(server == destinationServer) {
-					setTimeout((function(){
-						console.log("Reached destination: " + destinationServer.getName());
-					}).bind(this), 2000);
-					destinationServerIdentified = true;
-					return false;
-				}
-			});
-			if(!destinationServerIdentified){
-				setTimeout((function(){
-					console.log(currentServer.getName() + " > " + servers[0].getName());
-					currentServer = servers[0];
-					this.send();
-				}).bind(this), 2000);
-			}
-		}
+	this.getDestinationServer = function(){
+		return destinationServer;
 	};
+	// this.send = function(){
+	// 	var servers = currentServer.listConnectedServers();
+	// 	if(servers.length > 0){
+	// 		var destinationServerIdentified = false;
+	// 		$.each(servers, function(index, server){
+	// 			if(server == destinationServer) {
+	// 				setTimeout((function(){
+	// 					console.log("Reached destination: " + destinationServer.getName());
+	// 				}).bind(this), 2000);
+	// 				destinationServerIdentified = true;
+	// 				return false;
+	// 			}
+	// 		});
+	// 		if(!destinationServerIdentified){
+	// 			setTimeout((function(){
+	// 				console.log(currentServer.getName() + " > " + servers[0].getName());
+	// 				currentServer = servers[0];
+	// 				this.send();
+	// 			}).bind(this), 2000);
+	// 		}
+	// 	}
+	// };
 	// this.type = args.type;
 	// this.nicDestination = args.destination;
 	// this.nicOrigin = args.nic;
