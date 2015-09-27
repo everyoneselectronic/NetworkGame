@@ -7,6 +7,9 @@ Nic = function(args){
 		this.connectedTo = nic;
 		this.cableLength = nic.acknowledgeNewConnection(this);
 	},
+	this.getConnectedNic = function(){
+		return this.connectedTo;
+	},
 	this.acknowledgeNewConnection = function(nic){
 		this.connectedTo = nic;
 		console.log("acknowledged connection");
@@ -30,6 +33,7 @@ Nic = function(args){
 		// tell it where it's come from
 		// tell it to go
 		var packet = new Packet({
+			type: "TCP",
 			nic: this,
 			destination: this.connectedTo,
 			payload: "PING MESSAGE"
@@ -38,10 +42,23 @@ Nic = function(args){
 	},
 	
 	this.inboundPacket = function(packet){
+		if(packet.needsResponse()){
+			this.sendResponsePacket(packet);
+		}
 		if(packet.nicDestination == this){
 			console.log("packet arrived at destination");
+			console.log("PAYLOAD: " + packet.getPayload());
 		} else {
 			console.log("forward on to another nic");
 		}
+	},
+	this.sendResponsePacket = function(packet){
+		var responsePacket = new Packet({
+			type: "ACK",
+			nic: this,
+			destination: packet.getOriginNic(),
+			payload: "ACK"
+		});
+		responsePacket.send();
 	}
 }

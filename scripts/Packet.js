@@ -1,4 +1,5 @@
 Packet = function(args){
+	this.type = args.type;
 	this.nicDestination = args.destination;
 	this.nicOrigin = args.nic;
 	this.nicNextLocation = null;
@@ -7,8 +8,14 @@ Packet = function(args){
 	this.getDeliveryTime = function(){
 		return (this.nicCurrentLocation.cableLength);
 	},
+	this.getOriginNic = function(){
+		return this.nicOrigin;
+	},
+	this.getPayload = function(){
+		return this.payload;
+	},
 	this.send = function(){
-		this.nicNextLocation = this.nicCurrentLocation.getServerConnectedTo().nic;
+		this.nicNextLocation = this.nicCurrentLocation.getConnectedNic();
 		console.log("time to destination: " + this.getDeliveryTime());
 		setTimeout((function(){
 			//TODO: scoping issue here - use jquery possibly
@@ -16,5 +23,8 @@ Packet = function(args){
 			this.nicCurrentLocation = this.nicDestination;
 			this.nicNextLocation.inboundPacket(this);
 		}).bind(this), this.getDeliveryTime() * 1000);
+	},
+	this.needsResponse = function(){
+		return (this.type == "TCP");
 	}
 };
