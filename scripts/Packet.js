@@ -5,16 +5,16 @@ Packet = function(args){
 	this.nicCurrentLocation = args.nic;
 	this.payload = args.payload;
 	this.getDeliveryTime = function(){
-		return (this.nicCurrentLocation.getServerConnectedTo().getDistanceFrom(this.nicDestination.server));
+		return (this.nicCurrentLocation.cableLength);
 	},
 	this.send = function(){
 		this.nicNextLocation = this.nicCurrentLocation.getServerConnectedTo().nic;
 		console.log("time to destination: " + this.getDeliveryTime());
-		setTimeout(function(){
+		setTimeout((function(){
 			//TODO: scoping issue here - use jquery possibly
 			console.log("reached destination server");
 			this.nicCurrentLocation = this.nicDestination;
 			this.nicNextLocation.inboundPacket(this);
-		}, this.getDeliveryTime() * 1000);
+		}).bind(this), this.getDeliveryTime() * 1000);
 	}
 };
